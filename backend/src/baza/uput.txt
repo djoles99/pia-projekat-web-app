@@ -1,0 +1,28 @@
+1. Instaliranje node.js
+
+2. FRONTEND
+ - instal. angulara
+	npm install @angular/cli
+ - kreiranje projekta
+	ng new <naziv>
+	
+	routing YES
+	CSS
+
+ - pokretanje projekta
+	ng serve --open
+
+3. BACKEND
+	npm install -g express
+	npm install -g cors
+	npm install -g mongoose 
+	npm install -g typescript
+
+ - pokretanje
+	npm install -g typescript //1x ako nema
+	tsc (typescript compiler) //svakom izmenom
+	npm run serve		  // -||-
+
+4. BAZA
+ - instaliranje MongoDB
+ - eventualno instaliranje MongoDBCompass ili sl. alat

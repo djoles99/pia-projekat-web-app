@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Registracija</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <div class="nav">
+    <a class="nav-item" routerLink="">Pocetna</a>
+    <a class="nav-item" routerLink="/pretraga">Pretraga</a>
+    <a class="nav-item" routerLink="/prijava">Prijava</a>
+    <a class="nav-item active" routerLink="/registracija">Registracija</a>
+  </div>
+
+
+    <form class="flex-container" name="forma_slika">
+        <table>
+            <tr>
+                <td style="width: 20vw;">Slika (opciono):</td>
+                <td>
+                    <div>
+                        <div *ngIf='imagePreview!=null&&imagePreview!=""'>
+                            <img [src]="imagePreview" >
+                        </div>
+                        <div *ngIf='imagePreview==null||imagePreview==""'>
+                            <img width="100px" height="100px" src="/assets/defaultuser.jpg">
+                        </div>
+                        <input style="
+                            display: none;
+                            width: 24vw;"
+                            name='slicka' id='slicka' type='file' [(ngModel)]='slicka' accept=".jpg,.png" (change)="onFileSelect($event)" #selectFile><br>
+                        <button (click)="selectFile.click()">Odaberi sliku</button>
+                        <!-- <button (click)="onUploadFile()">Upload</button> -->
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <form class="flex-container" name="forma_reg">
+        <table>
+            <tr>
+                <td style="width: 35vw;">Ime:</td>
+                <td>
+                    <input type='text' name='ime' [(ngModel)]='ime'>
+                </td>
+            </tr>
+            <tr>
+                <td>Prezime:</td>
+                <td>
+                    <input type='text' name='prezime' [(ngModel)]='prezime'>
+                </td>
+            </tr>
+            <tr>
+                <td>Korisnicko ime:</td>
+                <td>
+                    <input type='text' name='kor_ime' [(ngModel)]='kor_ime'>
+                </td>
+            </tr>
+            <tr>
+                <td>Lozinka:</td>
+                <td>
+                    <input type='text' name='lozinka' [(ngModel)]='lozinka'>
+                </td>
+            </tr>
+            <tr>
+                <td>Elektronska posta:</td>
+                <td>
+                    <input type='text' name='mejl' [(ngModel)]='mejl'>
+                </td>
+            </tr>
+            <tr>
+                <td>Telefon:</td>
+                <td>
+                    <input type='text' name='telefon' [(ngModel)]='telefon'>
+                </td>
+            </tr>
+            <tr>
+                <td>Adresa:</td>
+                <td>
+                    <input type='text' name='adresa' [(ngModel)]='adresa'>
+                </td>
+            </tr>
+            <!-- <tr>
+                <td>Tip:</td>
+                <td>
+                    <select name='tip' [(ngModel)]='tip'>
+                        <option value='citalac'>citalac</option>
+                        <option value='moderator'>moderator</option>
+                    </select>
+                </td>
+            </tr> -->
+            <tr>
+                <td>
+                    <button (click)='registracija()'>Registracija</button>
+                </td>
+                <td>
+                    <button (click)='nazad()'>Nazad</button>
+                </td>
+            </tr>
+            <tr *ngIf='greska!=null'>
+                <td *ngIf='greska!=null'>
+                    <span *ngIf='greska!=null' id="poruka">{{greska}}</span>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+    
+    <div class='ftrdiv'></div>
+    <div class="ftr">Biblioteka<br>2022.</div>
+</body>
+
+</html>

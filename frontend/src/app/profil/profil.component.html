@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Profil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <div class="nav">
+    <div *ngIf="this.kor!=null">
+        <div class="image-preview" id="profilna" *ngIf='this.userPfp==""'>
+            <img (click)="profil()" width="1vw" height="1vw" src="/assets/defaultuser.jpg">
+        </div>
+        <div *ngIf='this.userPfp!=""'>
+            <div class="image-preview" id="profilna">
+                <img (click)="profil()" width="1vw" height="1vw" [src]="this.userPfp">
+            </div>
+        </div>
+    </div>
+    <a class="nav-item" routerLink="/">Pocetna</a>
+    <a class="nav-item" routerLink="/pretraga">Pretraga</a>
+    <a class="nav-item active" routerLink="/profil">Profil</a>
+    <a class="nav-item" routerLink="/istorija">Istorija zaduzenja</a>
+    <a class="nav-item" routerLink="/pregled">Pregled zaduzenih knjiga</a>
+    <a class="nav-item" routerLink="/dodaj" *ngIf="this.moderatorJe">Dodaj knjigu</a>
+    <a class="nav-item" routerLink="/korisnici" *ngIf="this.adminJe">Korisnici</a>
+    <!-- <a class="nav-item" routerLink="/registracija">Registracija</a> -->
+    <a class="nav-item" routerLink="/promena-lozinke">Promena lozinke</a>
+    <form *ngIf="this.kor!=null">
+        <div class="form-item">
+            <button id="logout" name="odjaviSe" (click)='odjaviSe()'>Odjavi se</button><br>
+        </div>
+    </form>
+  </div>
+
+
+
+  <div class="flex-container">
+    <form>
+        <table>
+            <!-- <tr>
+                <td style="width: 20vw;">Slika profila:</td>
+                <td>
+                    <div>
+                        <div *ngIf='imagePreview!=null&&imagePreview!=""'>
+                            <img [src]="imagePreview" >
+                        </div>
+                        <div *ngIf='imagePreview==null||imagePreview==""'>
+                            <img width="100px" height="100px" src="/assets/defaultbook.jpg">
+                        </div>
+                        <input style="
+                            display: none;
+                            width: 24vw;"
+                            name='slicka' type='file' accept=".jpg,.png" (change)="onFileSelect($event)" #selectFile><br>
+                        <button (click)="selectFile.click()">Odaberi sliku</button>
+                    </div>
+                </td>
+            </tr> -->
+            <tr>
+                <td>Slika profila:</td>
+                <td *ngIf="izmena==false">
+                    <div *ngIf="this.kor!=null">
+                        <div class="image-preview" *ngIf='this.user2Pfp==""'>
+                            <img (click)="profil()" width="1vw" height="1vw" src="/assets/defaultuser.jpg">
+                        </div>
+                        <div *ngIf='this.user2Pfp!=""'>
+                            <div class="image-preview">
+                                <img (click)="profil()" width="1vw" height="1vw" [src]="this.user2Pfp">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td *ngIf="izmena==true">
+                    <div>
+                        <div *ngIf='imagePreview!=null&&imagePreview!=""'>
+                            <img [src]="imagePreview" >
+                        </div>
+                        <div *ngIf='imagePreview==null||imagePreview==""'>
+                            <img width="100px" height="100px" src="/assets/defaultuser.jpg">
+                        </div>
+                        <input style="
+                            display: none;
+                            width: 24vw;"
+                            name='slicka' type='file' accept=".jpg,.png" (change)="onFileSelect($event)" #selectFile><br>
+                        <button (click)="selectFile.click()">Odaberi sliku</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="kor_ime">Korisnicko ime:</label></td>
+                <td *ngIf="izmena==false">{{kor_ime}}</td>
+                <td *ngIf="izmena==true"><input name='kor_ime' id='kor_ime' type='text' [(ngModel)]='kor_ime'></td>
+            </tr>
+            <!-- <tr>
+                <td><label for="lozinka">Lozinka:</label></td>
+                <td *ngIf="izmena==false">{{lozinka}}</td>
+            </tr> -->
+            <tr>
+                <td><label for="ime">Ime:</label></td>
+                <td *ngIf="izmena==false">{{ime}}</td>
+                <td *ngIf="izmena==true"><input name='ime' id='ime' type='text' [(ngModel)]='ime'></td>
+            </tr>
+            <tr>
+                <td><label for="prezime">Prezime:</label></td>
+                <td *ngIf="izmena==false">{{prezime}}</td>
+                <td *ngIf="izmena==true"><input name='prezime' id='prezime' type='text' [(ngModel)]='prezime'></td>
+            </tr>
+            <tr>
+                <td><label for="tip">Tip:</label></td>
+                <td>{{tip}}</td>
+                <!-- <td *ngIf="izmena==true"><input name='tip' id='tip' type='text' [(ngModel)]='tip'></td> -->
+            </tr>
+            <tr>
+                <td><label for="mejl">E-posta:</label></td>
+                <td *ngIf="izmena==false">{{mejl}}</td>
+                <td *ngIf="izmena==true"><input name='mejl' id='mejl' type='text' [(ngModel)]='mejl'></td>
+            </tr>
+            <tr>
+                <td><label for="adresa">Adresa:</label></td>
+                <td *ngIf="izmena==false">{{adresa}}</td>
+                <td *ngIf="izmena==true"><input name='adresa' id='adresa' type='text' [(ngModel)]='adresa'></td>
+            </tr>
+            <tr>
+                <td><label for="telefon">Telefon:</label></td>
+                <td *ngIf="izmena==false">{{telefon}}</td>
+                <td *ngIf="izmena==true"><input name='telefon' id='telefon' type='text' [(ngModel)]='telefon'></td>
+            </tr>
+            <tr>
+                <td><button *ngIf="izmena==false" (click)="izmeni()">Izmeni</button></td>
+                <td><button *ngIf="izmena==true" (click)="potvrdi()">Potvrdi</button></td>
+            </tr>
+            <tr *ngIf="adminJe==true&&korEdit!=null">
+                <td><button (click)="izbrisi()">Izbrisi</button></td>
+                <td></td>
+            </tr>
+        </table>
+        <div id="poruka">{{greska}}</div>
+    </form>
+  </div>
+
+  <!-- <div class="flex-container">
+    <form>
+      <div class="form-table">
+
+        <div class="form-item">
+          <a class="form-item" routerLink="registracija" name="registracija">Registrujte se ovde</a>
+        </div>
+
+        <div class="form-item">
+          <a class="form-item" routerLink="promena-lozinke" name="promena-lozinke">Promenite lozinku ovde</a>
+        </div>
+
+        <div class="form-item">
+        </div>
+
+
+      </div>
+    </form>
+  </div> -->
+
+  <div class='ftrdiv'></div>
+  <div class="ftr">Biblioteka<br>2022.</div>
+</body>
+
+</html>
+
+

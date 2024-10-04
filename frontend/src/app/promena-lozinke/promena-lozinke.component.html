@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Promena lozinke</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <div class="nav">
+    <div *ngIf="this.kor!=null">
+        <div class="image-preview" id="profilna" *ngIf='this.userPfp==""'>
+            <img (click)="profil()" width="1vw" height="1vw" src="/assets/defaultuser.jpg">
+        </div>
+        <div *ngIf='this.userPfp!=""'>
+            <div class="image-preview" id="profilna">
+                <img (click)="profil()" width="1vw" height="1vw" [src]="this.userPfp">
+            </div>
+        </div>
+    </div>
+    <a class="nav-item" routerLink="/">Pocetna</a>
+    <a class="nav-item" routerLink="/pretraga">Pretraga</a>
+    <a class="nav-item" routerLink="/profil">Profil</a>
+    <a class="nav-item" routerLink="/istorija">Istorija zaduzenja</a>
+    <a class="nav-item" routerLink="/pregled">Pregled zaduzenih knjiga</a>
+    <a class="nav-item" routerLink="/dodaj" *ngIf="this.moderatorJe">Dodaj knjigu</a>
+    <a class="nav-item" routerLink="/korisnici" *ngIf="this.adminJe">Korisnici</a>
+    <!-- <a class="nav-item" routerLink="/registracija">Registracija</a> -->
+    <a class="nav-item active" routerLink="/promena-lozinke">Promena lozinke</a>
+    <form *ngIf="this.kor!=null">
+        <div class="form-item">
+          <button id="logout" name="odjaviSe" (click)='odjaviSe()'>Odjavi se</button><br>
+        </div>
+    </form>
+  </div>
+
+
+
+  <div class="flex-container">
+    <form>
+        <table>
+            <tr>
+                <td><label for="kor_ime">Korisnicko ime:</label></td>
+                <td><input name='kor_ime' id='kor_ime' type='text' placeholder='Username' [(ngModel)]='kor_ime'></td>
+            </tr>
+            <tr>
+                <td><label for="stara_lozinka">Stara lozinka:</label></td>
+                <td><input name='stara_lozinka' id='stara_lozinka' type='password' placeholder='Old Password' [(ngModel)]='stara_lozinka'></td>
+            </tr>
+            <tr>
+                <td><label for="nova_lozinka">Nova lozinka:</label></td>
+                <td><input name='nova_lozinka' id='nova_lozinka' type='password' placeholder='New Password' [(ngModel)]='nova_lozinka'></td>
+            </tr>
+            <tr>
+                <td><label for="nova_lozinka2">Potvrda lozinke:</label></td>
+                <td><input name='nova_lozinka2' id='nova_lozinka2' type='password' placeholder='Password Confirm' [(ngModel)]='nova_lozinka2'></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button name="promeniLozinku" (click)='promeniLozinku()'>Promeni</button></td>
+            </tr>
+            
+        </table>
+        <div id="poruka">{{greska}}</div>
+    </form>
+  </div>
+
+  <!-- <div class="flex-container">
+    <form>
+      <div class="form-table">
+
+        <div class="form-item">
+          <a class="form-item" routerLink="registracija" name="registracija">Registrujte se ovde</a>
+        </div>
+
+        <div class="form-item">
+          <a class="form-item" routerLink="promena-lozinke" name="promena-lozinke">Promenite lozinku ovde</a>
+        </div>
+
+        <div class="form-item">
+        </div>
+
+
+      </div>
+    </form>
+  </div> -->
+
+  <div class='ftrdiv'></div>
+  <div class="ftr">Biblioteka<br>2022.</div>
+</body>
+
+</html>
+
+

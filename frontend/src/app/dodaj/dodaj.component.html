@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Dodaj knjigu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <form name="nav_form">
+        <div class="nav">
+            <div *ngIf="this.kor!=null">
+                <div class="image-preview" id="profilna" *ngIf='this.userPfp==""'>
+                    <img (click)="profil()" width="1vw" height="1vw" src="/assets/defaultuser.jpg">
+                </div>
+                <div *ngIf='this.userPfp!=""'>
+                    <div class="image-preview" id="profilna">
+                        <img (click)="profil()" width="1vw" height="1vw" [src]="this.userPfp">
+                    </div>
+                </div>
+            </div>
+            <a class="nav-item" routerLink="">Pocetna</a>
+            <a class="nav-item" routerLink="/pretraga">Pretraga</a>
+            <a class="nav-item" routerLink="/profil" *ngIf="this.kor!=null">Profil</a>
+            <a class="nav-item" routerLink="/istorija" *ngIf="this.kor!=null">Istorija zaduzenja</a>
+            <a class="nav-item" routerLink="/pregled" *ngIf="this.kor!=null">Pregled zaduzenih knjiga</a>
+            <a class="nav-item active" routerLink="/dodaj" *ngIf="this.moderatorJe">Dodaj knjigu</a>
+            <a class="nav-item" routerLink="/korisnici" *ngIf="this.adminJe">Korisnici</a>
+            <a class="nav-item" routerLink="/prijava" *ngIf="this.kor==null">Prijava</a>
+            <a class="nav-item" routerLink="/registracija" *ngIf="this.kor==null">Registracija</a>
+            <a class="nav-item" routerLink="/promena-lozinke" *ngIf="this.kor!=null">Promena lozinke</a>
+            <form *ngIf="this.kor!=null">
+                <div class="form-item">
+                    <button id="logout" name="odjaviSe" (click)='odjaviSe()'>Odjavi se</button><br>
+                </div>
+            </form>
+        </div>
+    </form>
+
+    <!-- <div class='flex-container'>
+        <form>
+          <div class='form-table'>
+            <div class='form-item' style="width: 30vw;">
+              <label for='stringPretrage'>Pretrazi knjige:</label>
+              <input name='stringPretrage' id='stringPretrage' type='text' placeholder='Naslov ili autor...' [(ngModel)]='stringPretrage'><br>
+            </div>
+            <br>
+            <div class='form-item'>
+              <button name='pretrazi' style="padding: 0vw;" (click)='pretrazi()'>Pretrazi</button><br>
+            </div>
+          </div>
+        </form>
+    </div> -->
+
+  <!-- <div class='flex-container' *ngIf="rezultatPretrage!=null">
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Naziv</th>
+            <th>Autor</th>
+            <th>Ocena</th>
+        </tr>
+        <tr *ngFor="let k of rezultatPretrage">
+            <td>{{k.id}}</td>
+            <td style="font-style: oblique;">{{k.naziv}}</td>
+            <td>{{k.autor}}</td>
+            <td>{{k.avg}}</td>
+        </tr>
+    </table>
+  </div> -->
+
+  <form class="flex-container" name="forma_slika">
+    <table>
+        <tr>
+            <td style="width: 12vw;">Slika knjige:</td>
+            <td>
+                <div>
+                    <div *ngIf='imagePreview!=null&&imagePreview!=""'>
+                        <img [src]="imagePreview" >
+                    </div>
+                    <div *ngIf='imagePreview==null||imagePreview==""'>
+                        <img width="100px" height="100px" src="/assets/defaultbook.jpg">
+                    </div>
+                    <input style="
+                        display: none;
+                        width: 12vw;"
+                        name='slicka' id='slicka' type='file' [(ngModel)]='slicka' accept=".jpg,.png" (change)="onFileSelect($event)" #selectFile><br>
+                    <button (click)="selectFile.click()">Odaberi sliku</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<form class="flex-container" name="forma_dodaj">
+    <table>
+        <tr>
+            <td style="width: 12vw;">Naziv:</td>
+            <td>
+                <input type='text' name='naziv' [(ngModel)]='naziv'>
+            </td>
+        </tr>
+        <tr>
+            <td>Autor:</td>
+            <td>
+                <input type='text' name='autor' [(ngModel)]='autor'>
+            </td>
+        </tr>
+        <tr>
+            <td>Zanr:</td>
+            <td>
+                <input type='text' name='zanr' [(ngModel)]='zanr'>
+            </td>
+        </tr>
+        <tr>
+            <td>Izdavac:</td>
+            <td>
+                <input type='text' name='izdavac' [(ngModel)]='izdavac'>
+            </td>
+        </tr>
+        <tr>
+            <td>Godina:</td>
+            <td>
+                <input type='text' name='godina' [(ngModel)]='godina'>
+            </td>
+        </tr>
+        <tr>
+            <td>Broj na stanju:</td>
+            <td>
+                <input type='number' min="0" name='na_stanju' [(ngModel)]='na_stanju'>
+            </td>
+        </tr>
+        <tr>
+            <td>Jezik:</td>
+            <td>
+                <input type='text' name='jezik' [(ngModel)]='jezik'>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button (click)='dodajKnjigu()'>Dodaj</button>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr *ngIf='greska!=null||poruka!=null'>
+            <td *ngIf='poruka!=null'>
+                <span *ngIf='poruka!=null' style="color:blue; ">{{poruka}}</span>
+            </td><td></td>
+            <td *ngIf='greska!=null'>
+                <span *ngIf='greska!=null' id="poruka">{{greska}}</span>
+            </td>
+        </tr>
+    </table>
+</form>
+  
+
+
+
+  <!-- <table>
+    <tr>
+        <td>
+            <h3>Knjiga dana</h3>
+        </td>
+        <td *ngIf="this.slicicaKnjigeDana==null">
+            <img width="100px" height="100px" src="/assets/defaultbook.jpg">
+        </td>
+        <td *ngIf="this.slicicaKnjigeDana!=null">
+            <div class="image-preview">
+                <img [src]="slicicaKnjigeDana">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-style: oblique;">{{knjigaDana.naziv}}</td>
+        <td>{{knjigaDana.autor}}</td>
+    </tr>
+    <tr>
+        <td>Prosecna ocena:</td>
+        <td>{{knjigaDana.avg_ocena}}</td>
+    </tr>
+</table> -->
+
+
+
+  <!-- <div class='flex-container'>
+    <form>
+      <div class='form-table'>
+        <div class='form-item' style="width: 30vw;">
+          <label for='kor_ime'>Korisnicko ime:</label><br>
+          <input name='kor_ime' id='kor_ime' type='text' placeholder='Username' [(ngModel)]='kor_ime'><br>
+        </div>
+        <br>
+        <div class='form-item'>
+          <label for='lozinka'>Lozinka:</label><br>
+          <input name='lozinka' id='lozinka' type='password' placeholder='Password' [(ngModel)]='lozinka'>
+        </div>
+        <br>
+        <div class='form-item'>
+          <button name='prijaviSe' (click)='prijaviSe()'>Prijavi se</button><br>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex-container">
+    <form>
+      <div class="form-table">
+        <div class="form-item2">
+          <a class="form-item2" routerLink="registracija" name="registracija">Registrujte se ovde</a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <span id="poruka">{{poruka}}</span> -->
+
+
+
+
+  <!-- <div class='flex-container'>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Naziv</th>
+        </tr>
+        <tr *ngFor="let k of this.top3knjige">
+            <td>{{k.id}}</td>
+            <td>{{k.naziv}}</td>
+        </tr>
+    </table>
+  </div> -->
+
+  <!-- <div class='flex-container' *ngIf="this.knjigaDana!=null">
+    <table>
+        <tr>
+            <td>
+                <h3>Knjiga dana</h3>
+            </td>
+            <td *ngIf="this.slicicaKnjigeDana==null">
+                <img width="100px" height="100px" src="/assets/defaultbook.jpg">
+            </td>
+            <td *ngIf="this.slicicaKnjigeDana!=null">
+                <div class="image-preview">
+                    <img [src]="slicicaKnjigeDana">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-style: oblique;">{{knjigaDana.naziv}}</td>
+            <td>{{knjigaDana.autor}}</td>
+        </tr>
+        <tr>
+            <td>Prosecna ocena:</td>
+            <td>{{knjigaDana.avg_ocena}}</td>
+        </tr>
+    </table>
+  </div> -->
+
+  <!-- <img width="200px" src="/assets/defaultbook.jpg"> -->
+
+  <!-- <div class="image-preview" >
+    <img [src]="imagePreview" >
+</div>
+<div class="image-preview2" >
+    <img [src]="imagePreview2" >
+</div> -->
+<div class='ftrdiv'></div>
+<div class="ftr">Biblioteka<br>2022.</div>
+</body>
+
+</html>
+
+

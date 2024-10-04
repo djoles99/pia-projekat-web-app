@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Pocetna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <form name="nav_form">
+        <div class="nav">
+          <div *ngIf="this.kor!=null">
+            <div class="image-preview" id="profilna" *ngIf='this.userPfp==""'>
+                <img (click)="profil()" width="1vw" height="1vw" src="/assets/defaultuser.jpg">
+            </div>
+            <div *ngIf='this.userPfp!=""'>
+                <div class="image-preview" id="profilna">
+                    <img (click)="profil()" width="1vw" height="1vw" [src]="this.userPfp">
+                </div>
+            </div>
+        </div>
+            <a class="nav-item active" routerLink="">Pocetna</a>
+            <a class="nav-item" routerLink="/pretraga">Pretraga</a>
+            <a class="nav-item" routerLink="/profil" *ngIf="this.kor!=null">Profil</a>
+            <a class="nav-item" routerLink="/istorija" *ngIf="this.kor!=null">Istorija zaduzenja</a>
+            <a class="nav-item" routerLink="/pregled" *ngIf="this.kor!=null">Pregled zaduzenih knjiga</a>
+            <a class="nav-item" routerLink="/dodaj" *ngIf="this.moderatorJe">Dodaj knjigu</a>
+            <a class="nav-item" routerLink="/korisnici" *ngIf="this.adminJe">Korisnici</a>
+            <a class="nav-item" routerLink="/prijava" *ngIf="this.kor==null">Prijava</a>
+            <a class="nav-item" routerLink="/registracija" *ngIf="this.kor==null">Registracija</a>
+            <!-- <a class="nav-item" routerLink="/prijava" *ngIf="this.kor!=null">Prijava</a>
+            <a class="nav-item" routerLink="/registracija" *ngIf="this.kor!=null">Registracija</a> -->
+            <a class="nav-item" routerLink="/promena-lozinke" *ngIf="this.kor!=null">Promena lozinke</a>
+            <form *ngIf="this.kor!=null">
+                <div class="form-item">
+                  <button id="logout" name="odjaviSe" (click)='odjaviSe()'>Odjavi se</button><br>
+                </div>
+            </form>
+        </div>
+    </form>
+
+
+
+  <!-- <div class='flex-container'>
+    <form>
+      <div class='form-table'>
+        <div class='form-item' style="width: 30vw;">
+          <label for='kor_ime'>Korisnicko ime:</label><br>
+          <input name='kor_ime' id='kor_ime' type='text' placeholder='Username' [(ngModel)]='kor_ime'><br>
+        </div>
+        <br>
+        <div class='form-item'>
+          <label for='lozinka'>Lozinka:</label><br>
+          <input name='lozinka' id='lozinka' type='password' placeholder='Password' [(ngModel)]='lozinka'>
+        </div>
+        <br>
+        <div class='form-item'>
+          <button name='prijaviSe' (click)='prijaviSe()'>Prijavi se</button><br>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex-container">
+    <form>
+      <div class="form-table">
+        <div class="form-item2">
+          <a class="form-item2" routerLink="registracija" name="registracija">Registrujte se ovde</a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <span id="poruka">{{poruka}}</span> -->
+
+
+  
+
+
+  <!-- <div class='flex-container'>
+    Top 3
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Naziv</th>
+        </tr>
+        <tr *ngFor="let k of this.top3knjige">
+            <td>{{k.id}}</td>
+            <td style="font-style: oblique;">{{k.naziv}}</td>
+        </tr>
+    </table>
+  </div> -->
+
+  <div class='flex-container' *ngIf="this.knjigaDana!=null">
+    <!-- BotD -->
+    <table>
+        <tr (click)="vidiKnjigu()" style="cursor: pointer;">
+            <td>
+                <h3>Knjiga dana</h3>
+            </td>
+            <td *ngIf="this.slicicaKnjigeDana==null" >
+                <img width="100px" height="100px" src="/assets/defaultbook.jpg">
+            </td>
+            <td *ngIf="this.slicicaKnjigeDana!=null">
+                <div>
+                    <img [src]="slicicaKnjigeDana">
+                </div>
+            </td>
+        </tr>
+        <tr (click)="vidiKnjigu()" style="cursor: pointer;">
+            <td style="font-style: oblique;">{{knjigaDana.naziv}}</td>
+            <td>{{knjigaDana.autor}}</td>
+        </tr>
+        <tr>
+            <td>Prosecna ocena:</td>
+            <td *ngIf="prosecnaOcena!=null">{{prosecnaOcena}}</td>
+            <td *ngIf="prosecnaOcena==null">/</td>
+        </tr>
+    </table>
+  </div>
+
+  <!-- <img width="200px" src="/assets/defaultbook.jpg"> -->
+
+  <!-- <div class="image-preview" >
+    <img [src]="imagePreview" >
+</div>
+<div class="image-preview2" >
+    <img [src]="imagePreview2" >
+</div> -->
+
+<div class="wrapper">
+  <div class="slider-bg"></div>
+  <div class="tagLine">Top 3 najpopularnije knjige</div>
+  <div id="slider" class="flex-container">
+    <div class="content">
+      <div class="books-wrapper">
+        <div *ngFor="let item of result; let i = index" class="showcased-book">
+          <div *ngIf='item.status&&item.slika!=null&&item.slika!=""'>
+            <img (click)="vidiKnjiguID(item.id)" style="cursor: pointer;" [src]="item.slika" />
+            <span style="font-style: oblique; font-size: larger;">{{item.naziv}}</span><br><br>
+            <span>{{item.autor}}</span>
+          </div>
+          <div *ngIf='item.status&&(item.slika==null||item.slika=="")'>
+            <img (click)="vidiKnjiguID(item.id)" style="cursor: pointer;" src="/assets/defaultbook.jpg" />
+            <span style="font-style: oblique; font-size: larger;">{{item.naziv}}</span><br><br>
+            <span>{{item.autor}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navigation">
+      <div (click)="prevBook()" class="prev">&lt;</div>
+      <div (click)="nextBook()" class="next">&gt;</div>
+    </div>
+  </div>
+  <div class="dots">
+    <input
+      type="radio"
+      [checked]="item.status"
+      name="arrPos"
+      *ngFor="let item of result; let i = index"
+      (click)="changeShowcase(i)"
+    />
+  </div>
+</div>
+
+
+<div class='ftrdiv' style="margin-top: 10vw;"></div>
+<div class="ftr">Biblioteka<br>2022.</div>
+<!-- <footer>BIBILIOTEKA</footer> -->
+</body>
+
+</html>
+
+

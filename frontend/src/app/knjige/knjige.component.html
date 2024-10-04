@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Knjiga</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <form name="nav_form">
+        <div class="nav">
+            <div *ngIf="this.kor!=null">
+                <div class="image-preview" id="profilna" *ngIf='this.userPfp==""'>
+                    <img (click)="profil()" width="1vw" height="1vw" src="/assets/defaultuser.jpg">
+                </div>
+                <div *ngIf='this.userPfp!=""'>
+                    <div class="image-preview" id="profilna">
+                        <img (click)="profil()" width="1vw" height="1vw" [src]="this.userPfp">
+                    </div>
+                </div>
+            </div>
+            <a class="nav-item" routerLink="">Pocetna</a>
+            <a class="nav-item" routerLink="/pretraga">Pretraga</a>
+            <a class="nav-item" routerLink="/profil" *ngIf="this.kor!=null">Profil</a>
+            <a class="nav-item" routerLink="/istorija" *ngIf="this.kor!=null">Istorija zaduzenja</a>
+            <a class="nav-item" routerLink="/pregled" *ngIf="this.kor!=null">Pregled zaduzenih knjiga</a>
+            <a class="nav-item" routerLink="/dodaj" *ngIf="this.moderatorJe">Dodaj knjigu</a>
+            <a class="nav-item" routerLink="/korisnici" *ngIf="this.adminJe">Korisnici</a>
+            <a class="nav-item" routerLink="/prijava" *ngIf="this.kor==null">Prijava</a>
+            <a class="nav-item" routerLink="/registracija" *ngIf="this.kor==null">Registracija</a>
+            <!-- <a class="nav-item" routerLink="/prijava" *ngIf="this.kor!=null">Prijava</a>
+            <a class="nav-item" routerLink="/registracija" *ngIf="this.kor!=null">Registracija</a> -->
+            <a class="nav-item" routerLink="/promena-lozinke" *ngIf="this.kor!=null">Promena lozinke</a>
+            <form *ngIf="this.kor!=null">
+                <div class="form-item">
+                    <button id="logout" name="odjaviSe" (click)='odjaviSe()'>Odjavi se</button><br>
+                </div>
+            </form>
+        </div>
+    </form>
+
+    <div *ngIf="knjiga!=null"> <!-- ako postoji knjiga-->
+        <div class='flex-container' style="justify-content: center;">
+        
+            <div *ngIf="izmena==false">
+                <div *ngIf='knjiga.slika==""||knjiga.slika==null'>
+                    <img style="width: 300px; height: 300px;" src="/assets/defaultbook.jpg">
+                </div>
+                <div *ngIf='knjiga.slika!=""&&knjiga.slika!=null'>
+                    <div>
+                        <img style="width: 100%; height: 100%;" [src]="knjiga.slika">
+                    </div>
+                </div>
+            </div>
+            <form *ngIf="izmena==true">
+                <div>
+                    <div *ngIf='imagePreview!=null&&imagePreview!=""'>
+                        <img [src]="imagePreview" >
+                    </div>
+                    <div *ngIf='imagePreview==null||imagePreview==""'>
+                        <img width="100px" height="100px" src="/assets/defaultbook.jpg">
+                    </div>
+                    <input style="
+                        display: none;
+                        width: 24vw;"
+                        name='slicka' type='file' accept=".jpg,.png" (change)="onFileSelect($event)" #selectFile><br>
+                    <button (click)="selectFile.click()">Odaberi sliku</button>
+                </div>
+            </form>
+            <form style="margin-left: 1vw;">
+                <table>
+                    <tr>
+                        <td style="font-size: larger; font-style: oblique;" *ngIf="izmena==false">{{knjiga.naziv}}</td>
+                        <td style="font-style: oblique;" *ngIf="izmena==false">{{knjiga.autor}}</td>
+                        <td *ngIf="izmena==true" >autor<input name='autor_novo' id='autor_novo' type='text' [(ngModel)]='autor_novo'></td> 
+                        <td *ngIf="izmena==true" >naziv<input  name='naziv_novo' id='naziv_novo' type='text' [(ngModel)]='naziv_novo'></td>
+                    </tr>
+                    <tr>
+                        <td>Izdavac i godina izdanja:</td>
+                        <td *ngIf="izmena==false">{{knjiga.izdavac}} {{knjiga.godina}}</td>
+                        <td *ngIf="izmena==true"><input name='izdavac_novo' id='izdavac_novo' type='text' [(ngModel)]='izdavac_novo'> 
+                        <input name='godina_novo' id='godina_novo' type='text' [(ngModel)]='godina_novo'></td>
+                    </tr>
+                    <tr>
+                        <td *ngIf="izmena==false">Zanr: {{knjiga.zanr}}</td>
+                        <td *ngIf="izmena==false">Jezik: {{knjiga.jezik}}</td>
+                        <td *ngIf="izmena==true">zanr:<input name='zanr_novo' id='zanr_novo' type='text' [(ngModel)]='zanr_novo'></td>
+                        <td *ngIf="izmena==true">jezik:<input name='jezik_novo' id='jezik_novo' type='text' [(ngModel)]='jezik_novo'></td>
+                    </tr>
+                    <tr>
+                        <td *ngIf="izmena==false">Na stanju: {{knjiga.na_stanju}}</td>
+                        <td *ngIf="izmena==true">na stanju:<input name='na_stanju_novo' id='na_stanju_novo' type='number' [(ngModel)]='na_stanju_novo'></td>
+                        <td *ngIf="mozeDaSeZaduzi"><button (click)="zaduzi()">Zaduzi</button></td>
+                        <td *ngIf="!mozeDaSeZaduzi&&!zaduzenaJe"></td>
+                        <td *ngIf="!mozeDaSeZaduzi&&zaduzenaJe&&izmena==false"><button (click)="razduzi()">Razduzi</button></td>
+                        <td *ngIf="!mozeDaSeZaduzi&&zaduzenaJe&&izmena==true"></td>
+                    </tr>
+                    <tr>
+                        <td>Prosecna ocena:</td>
+                        <td *ngIf="prosecnaOcena!=null">{{prosecnaOcena}}</td>
+                        <td *ngIf="prosecnaOcena==null">/</td>
+                    </tr>
+                    <tr *ngIf="moderatorJe">
+                        <td><button *ngIf="izmena==false" (click)="izmeni()">Izmeni</button></td>
+                        <td><button *ngIf="izmena==true" (click)="potvrdi()">Potvrdi</button></td>
+                    </tr>
+                    <tr *ngIf="adminJe">
+                        <td><button *ngIf="izmena==false" (click)="obrisiKnjigu()">Obrisi knjigu</button></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <span id="poruka" >{{poruka}}</span>
+
+    </div>
+
+    <div style="margin-left: 1vw;" *ngIf="knjiga==null">
+        <h1>Knjiga sa tim ID-ijem ne postoji</h1>
+    </div>
+
+    <div *ngIf="knjiga!=null" class='flex-container' style="justify-content: left;">
+        <form style="margin-left: 1vw;">
+            <table>
+                <tr>
+                    <td>Dodajte ocenu:</td>
+                    <td><input style="width:10vw;" name='ocena' id='ocena' type="number" [(ngModel)]='ocena' max="10" min="1"></td>
+                    <td><button (click)="dodajRecenziju()">Potvrdi</button></td>
+                </tr>
+                <tr>
+                    <td>Dodajte komentar:</td>
+                    <td><textarea style="width:10vw;" name='komentar' id='komentar' maxlength="1000" [(ngModel)]='komentar'> </textarea></td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div *ngIf="recenzijeKnjige!=null&&recenzijeKnjige.length!=0"> <!-- ako postoji recenzijeKnjige-->
+        <div class='flex-container' style="justify-content: left;">
+            <form style="margin-left: 1vw;">
+                <table>
+                    <tr *ngFor="let r of recenzijeKnjige"> 
+                        <table>
+                            <tr>
+                                <td>korisnik: <span style="font-style: oblique;">{{r.citalac}}</span></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Ocena: {{r.ocena}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>{{r.komentar}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>{{r.datum}}</td>
+                            </tr>
+                        </table>
+                        <br>
+                    </tr>
+                    <br>
+                </table>
+            </form>
+        </div>
+
+    </div>
+
+    <div style="margin-left: 1vw; padding-bottom: 3vw;" *ngIf="(recenzijeKnjige==null||recenzijeKnjige.length==0)&&knjiga!=null">
+        <h3>Jos uvek ne postoje recenzije za ovu knjigu</h3>
+    </div>
+
+    <div class='ftrdiv'></div>
+    <div class="ftr">Biblioteka<br>2022.</div>
+</body>
+
+</html>
+
+

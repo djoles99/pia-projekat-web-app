@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <div class="nav">
+    <a class="nav-item active" routerLink="/admin">Admin</a>
+    <!-- <a class="nav-item" routerLink="/promena-lozinke">Promena lozinke</a> -->
+    
+    <!-- <form>
+      <div class="form-item">
+        <button name="odjaviSe" (click)='odjaviSe()'>Odjavi se</button><br>
+      </div>
+    </form> -->
+  </div>
+
+
+
+  <div class='flex-container'>
+    <form>
+      <div class='form-table'>
+        <div class='form-item' style="width: 30vw;">
+          <label for='kor_ime'>Korisnicko ime:</label><br>
+          <input name='kor_ime' id='kor_ime' type='text' placeholder='Username' [(ngModel)]='kor_ime'><br>
+        </div>
+        <br>
+        <div class='form-item'>
+          <label for='lozinka'>Lozinka:</label><br>
+          <input name='lozinka' id='lozinka' type='password' placeholder='Password' [(ngModel)]='lozinka'>
+        </div>
+        <br>
+        <div class='form-item'>
+          <button name='prijaviSe' (click)='prijaviSe()'>Prijavi se</button><br>
+        </div>
+      </div>
+    </form>
+  </div><br>
+  
+  <div id="poruka">{{poruka}}</div>
+
+
+</body>
+
+</html>
+
+
